@@ -39,6 +39,7 @@
   <div id="timer" class="timer">05:00</div>
   <button id="start">เริ่มนั่งสมาธิ 5 นาที</button>
 <audio id="bell" preload="auto" src="bell_5sec.mp3"></audio>
+<audio id="backgroundAudio" preload="auto" loop playsinline src="silent.wav"></audio>
   <div class="hint">เมื่อครบเวลา จะมีเสียงระฆังและแสดงข้อความแผ่เมตตา</div>
 
   <div id="metta" class="metta">
@@ -72,7 +73,23 @@ function playBell(){
   bell.volume = 1.0;
   bell.play().catch(()=>{});
 }
+if ('mediaSession' in navigator) {
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: 'วิทิสาสมาธิ',
+    artist: 'Meditation Timer',
+    album: 'นั่งสมาธิ 5 นาที'
+  });
 
+  navigator.mediaSession.setActionHandler('play', () => {
+    const bg = document.getElementById('backgroundAudio');
+    bg.play().catch(() => {});
+  });
+
+  navigator.mediaSession.setActionHandler('pause', () => {
+    const bg = document.getElementById('backgroundAudio');
+    bg.pause();
+  });
+}
 async function requestWakeLock(){
   if (!('wakeLock' in navigator)) return;
   try {
@@ -122,6 +139,10 @@ startBtn.addEventListener('click', async ()=>{
   if (endTime) return;
 
   metta.style.display='none';
+ 
+ const bg = document.getElementById('backgroundAudio');
+ bg.play().catch(()=>{});
+ 
   remaining=TOTAL;
   endTime = Date.now() + TOTAL * 1000;
   showTime(remaining);
