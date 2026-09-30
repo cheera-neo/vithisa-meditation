@@ -50,45 +50,96 @@
 
 <script>
 const TOTAL = 5 * 60;
-let remaining = TOTAL, timerId = null;
+let remaining = TOTAL;
+let timerId = null;
+let endTime = null;
+let wakeLock = null;
 
 const timerEl = document.getElementById('timer');
 const startBtn = document.getElementById('start');
 const metta = document.getElementById('metta');
 
 function showTime(sec){
+  sec = Math.max(0, Math.ceil(sec));
   const m = Math.floor(sec/60).toString().padStart(2,'0');
   const s = (sec%60).toString().padStart(2,'0');
   timerEl.textContent = `${m}:${s}`;
 }
 
 function playBell(){
-const bell = document.getElementById('bell');
-bell.currentTime = 0;
-bell.volume = 1.0;
-bell.play().catch(()=>{});
+  const bell = document.getElementById('bell');
+  bell.currentTime = 0;
+  bell.volume = 1.0;
+  bell.play().catch(()=>{});
+}
+
+async function requestWakeLock(){
+  if (!('wakeLock' in navigator)) return;
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+  } catch (err) {
+    wakeLock = null;
+  }
+}
+
+async function releaseWakeLock(){
+  if (wakeLock) {
+    try { await wakeLock.release(); } catch (err) {}
+    wakeLock = null;
+  }
+}
+
+function updateTimer(){
+  if (!endTime) return;
+
+  const secondsLeft = Math.max(0, (endTime - Date.now()) / 1000);
+  remaining = Math.ceil(secondsLeft);
+  showTime(remaining);
+
+  if (secondsLeft <= 0) {
+    finish();
+  }
 }
 
 function finish(){
-  clearInterval(timerId); timerId=null;
-  remaining=0; showTime(0);
-  startBtn.disabled=false;
-  startBtn.textContent='เริ่มใหม่ 5 นาที';
-  metta.style.display='block';
+  if (!timerId && !endTime) return;
+
+  clearInterval(timerId);
+  timerId = null;
+  endTime = null;
+  remaining = 0;
+  showTime(0);
+
+  startBtn.disabled = false;
+  startBtn.textContent = 'เริ่มใหม่ 5 นาที';
+  metta.style.display = 'block';
+
+  releaseWakeLock();
   playBell();
 }
 
-startBtn.addEventListener('click',()=>{
-  if(timerId) return;
+startBtn.addEventListener('click', async ()=>{
+  if (endTime) return;
+
   metta.style.display='none';
-  remaining=TOTAL; showTime(remaining);
+  remaining=TOTAL;
+  endTime = Date.now() + TOTAL * 1000;
+  showTime(remaining);
+
   startBtn.disabled=true;
   startBtn.textContent='กำลังนั่งสมาธิ…';
-  timerId=setInterval(()=>{
-    remaining--;
-    showTime(remaining);
-    if(remaining<=0) finish();
-  },1000);
+
+  await requestWakeLock();
+
+  updateTimer();
+  timerId=setInterval(updateTimer,250);
+});
+
+document.addEventListener('visibilitychange', async ()=>{
+  if (document.visibilityState === 'visible' && endTime) {
+    await requestWakeLock();
+    updateTimer();
+  }
 });
 
 if('serviceWorker' in navigator){
