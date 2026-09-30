@@ -10,42 +10,41 @@
 <link rel="manifest" href="manifest.json">
 <title>วิทิสาสมาธิ Meditation Timer</title>
 <style>
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Thai",sans-serif;background:linear-gradient(160deg,#fff8e8,#f4ead8);color:#4a3424;min-height:100vh}
-  .wrap{max-width:620px;margin:auto;padding:24px 18px 40px;text-align:center}
-  h1{margin:8px 0 4px;font-size:30px}
-  .sub{margin:0 0 22px;color:#7a5a3b}
-  .intro,.metta{background:rgba(255,255,255,.75);border-radius:18px;padding:18px;line-height:1.9;text-align:left;box-shadow:0 4px 18px rgba(80,50,20,.08)}
-  .timer{font-size:76px;font-weight:700;letter-spacing:2px;margin:28px 0 20px}
-  button{border:0;border-radius:999px;padding:15px 32px;font-size:20px;font-weight:700;background:#8b5e34;color:white;cursor:pointer;box-shadow:0 5px 15px rgba(70,40,15,.2)}
-  button:disabled{opacity:.55;cursor:default}
-  .metta{display:none;margin-top:24px}
-  .hint{font-size:14px;color:#80654d;margin-top:14px}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Thai",sans-serif;background:linear-gradient(160deg,#fff8e8,#f4ead8);color:#4a3424;min-height:100vh}
+.wrap{max-width:620px;margin:auto;padding:24px 18px 40px;text-align:center}
+h1{margin:8px 0 4px;font-size:30px}
+.sub{margin:0 0 22px;color:#7a5a3b}
+.intro,.metta{background:rgba(255,255,255,.75);border-radius:18px;padding:18px;line-height:1.9;text-align:left;box-shadow:0 4px 18px rgba(80,50,20,.08)}
+.timer{font-size:76px;font-weight:700;letter-spacing:2px;margin:28px 0 20px}
+button{border:0;border-radius:999px;padding:15px 32px;font-size:20px;font-weight:700;background:#8b5e34;color:white;cursor:pointer;box-shadow:0 5px 15px rgba(70,40,15,.2)}
+button:disabled{opacity:.55;cursor:default}
+.metta{display:none;margin-top:24px}
+.hint{font-size:14px;color:#80654d;margin-top:14px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>วิทิสาสมาธิ</h1>
-  <div class="sub">Meditation Timer • 5 นาที</div>
+<h1>วิทิสาสมาธิ</h1>
+<div class="sub">Meditation Timer • 5 นาที</div>
 
-  <div class="intro">
-    ข้าพเจ้า ระลึกถึง คุณพระพุทธเจ้า คุณพระธรรม คุณพระสงฆ์
-    คุณบิดามารดา คุณครูบาอาจารย์ จงมาดลบันดาล ให้ใจของข้าพเจ้า
-    จงรวมลงเป็นสมาธิ พุทโธ ธัมโม สังโฆ พุทโธ ธัมโม สังโฆ
-    พุทโธ ธัมโม สังโฆ พุทโธ พุทโธ พุทโธ
-  </div>
+<div class="intro">
+ระลึกถึง คุณพระพุทธเจ้า คุณพระธรรม คุณพระสงฆ์
+คุณบิดามารดา คุณครูบาอาจารย์<br>
+ผ่อนลมหายใจให้ผ่อนคลาย จากนั้นบริกรรมในใจ
+พุทโธ พุทโธ พุทโธ วางไว้ที่ฐานจิต<br>
+ที่ตกลงใจเลือกแล้ว ว่าจะวางที่ หน้าผาก หัวใจ หรือสะดือ
+</div>
 
-  <div id="timer" class="timer">05:00</div>
-  <button id="start">เริ่มนั่งสมาธิ 5 นาที</button>
-  <div class="hint">เมื่อครบเวลา จะมีเสียงระฆังและแสดงข้อความแผ่เมตตา</div>
+<div id="timer" class="timer">05:00</div>
+<button id="start">เริ่มนั่งสมาธิ 5 นาที</button>
+<div class="hint">เมื่อครบเวลา จะมีเสียงระฆังและแสดงข้อความแผ่เมตตา</div>
 
-  <div id="metta" class="metta">
-    <strong>แผ่เมตตา</strong><br><br>
-    สัพเพ สัตตา สทา โหนตุ<br>
-    อเวรา สุขชีวิโน<br>
-    กัตตา เมตตัง สัพพะสัตเตสุ<br>
-    สุขี อัตตานัง ปริหรันตุ
-  </div>
+<div id="metta" class="metta">
+<strong>แผ่เมตตา</strong><br><br>
+สัพเพ สัตตา สทา โหนตุ<br>
+อเวรา สุขชีวิโน
+</div>
 </div>
 
 <script>
@@ -57,52 +56,51 @@ const startBtn = document.getElementById('start');
 const metta = document.getElementById('metta');
 
 function showTime(sec){
-  const m = Math.floor(sec/60).toString().padStart(2,'0');
-  const s = (sec%60).toString().padStart(2,'0');
-  timerEl.textContent = `${m}:${s}`;
+const m = Math.floor(sec/60).toString().padStart(2,'0');
+const s = (sec%60).toString().padStart(2,'0');
+timerEl.textContent = `${m}:${s}`;
 }
 
 function playBell(){
-  // สร้างเสียงระฆังสั้น ๆ สำรองกรณีไม่มีไฟล์เสียง
-  const Ctx = window.AudioContext || window.webkitAudioContext;
-  if(!Ctx) return;
-  const ctx = new Ctx();
-  const now = ctx.currentTime;
-  [523.25,659.25,783.99].forEach((freq,i)=>{
-    const o=ctx.createOscillator(), g=ctx.createGain();
-    o.type='sine'; o.frequency.value=freq;
-    g.gain.setValueAtTime(0.0001,now+i*0.05);
-    g.gain.exponentialRampToValueAtTime(0.12,now+i*0.05+0.02);
-    g.gain.exponentialRampToValueAtTime(0.0001,now+i*0.05+4.8);
-    o.connect(g).connect(ctx.destination);
-    o.start(now+i*0.05); o.stop(now+i*0.05+5);
-  });
+const Ctx = window.AudioContext || window.webkitAudioContext;
+if(!Ctx) return;
+const ctx = new Ctx();
+const now = ctx.currentTime;
+[523.25,659.25,783.99].forEach((freq,i)=>{
+const o=ctx.createOscillator(), g=ctx.createGain();
+o.type='sine'; o.frequency.value=freq;
+g.gain.setValueAtTime(0.0001,now+i*0.05);
+g.gain.exponentialRampToValueAtTime(0.12,now+i*0.05+0.02);
+g.gain.exponentialRampToValueAtTime(0.0001,now+i*0.05+4.8);
+o.connect(g).connect(ctx.destination);
+o.start(now+i*0.05); o.stop(now+i*0.05+5);
+});
 }
 
 function finish(){
-  clearInterval(timerId); timerId=null;
-  remaining=0; showTime(0);
-  startBtn.disabled=false;
-  startBtn.textContent='เริ่มใหม่ 5 นาที';
-  metta.style.display='block';
-  playBell();
+clearInterval(timerId); timerId=null;
+remaining=0; showTime(0);
+startBtn.disabled=false;
+startBtn.textContent='เริ่มใหม่ 5 นาที';
+metta.style.display='block';
+playBell();
 }
 
 startBtn.addEventListener('click',()=>{
-  if(timerId) return;
-  metta.style.display='none';
-  remaining=TOTAL; showTime(remaining);
-  startBtn.disabled=true;
-  startBtn.textContent='กำลังนั่งสมาธิ…';
-  timerId=setInterval(()=>{
-    remaining--;
-    showTime(remaining);
-    if(remaining<=0) finish();
-  },1000);
+if(timerId) return;
+metta.style.display='none';
+remaining=TOTAL; showTime(remaining);
+startBtn.disabled=true;
+startBtn.textContent='กำลังนั่งสมาธิ…';
+timerId=setInterval(()=>{
+remaining--;
+showTime(remaining);
+if(remaining<=0) finish();
+},1000);
 });
 
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
+window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
 }
 </script>
 </body>
