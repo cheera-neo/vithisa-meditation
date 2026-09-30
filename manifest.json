@@ -1,0 +1,10 @@
+{
+  "name": "วิทิสาสมาธิ Meditation Timer",
+  "short_name": "วิทิสาสมาธิ",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fff8e8",
+  "theme_color": "#8b5e34",
+  "lang": "th",
+  "description": "เครื่องจับเวลานั่งสมาธิ 5 นาที"
+}
